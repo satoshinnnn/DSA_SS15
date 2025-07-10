@@ -1,0 +1,81 @@
+//
+// Created by Admin on 10/07/2025.
+//
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct {
+    int *arr;
+    int front;
+    int rear;
+    int maxSize;
+}Queue;
+Queue initQueue(int maxSize) {
+    Queue q;
+    q.arr = (int*)malloc(maxSize*sizeof(int));
+    q.front = 0;
+    q.rear = -1;
+    q.maxSize = maxSize;
+    return q;
+}
+int isEmpty(Queue* q) {
+    return q->front > q->rear;
+}
+int isFull(Queue* q) {
+    return q->rear == q->maxSize - 1;
+}
+void enQueue(Queue* q, int value) {
+    if (isFull(q)) {
+        printf("Queue is full\n");
+        return;
+    }
+    q->arr[++q->rear] = value;          //them phan tu vao cuoi mang
+}
+void printQueue(Queue* q) {
+    if (isEmpty(q)) {
+        printf("Queue is empty\n");
+        return;
+    }
+    for (int i = q->arr[q->front]; i <= q->rear; i++) {
+        printf("%d ", q->arr[i]);
+    }
+}
+int frontValue(Queue* q) {
+    if (isEmpty(q)) {
+        printf("Queue is empty\n");
+        return -1;
+    }
+    return q->arr[q->front];
+}
+int isSorted(Queue* q) {
+    if (isEmpty(q)) {
+        printf("Queue is empty\n");
+        return -1;
+    }
+    for (int i = q->arr[q->front]; i < q->rear; i++) {
+        if (q->arr[i]+1!=q->arr[i+1]) {
+            return 0;
+        }
+    }
+    return 1;
+}
+int main () {
+    int maxSize;
+    printf("Enter max size: ");
+    scanf("%d", &maxSize);
+    Queue q = initQueue(maxSize);
+
+    for (int i = 0; i < maxSize; i++) {
+        int temp;
+        printf("Enter element %d: ", i + 1);
+        scanf("%d", &temp);
+        enQueue(&q, temp);
+    }
+    printQueue(&q);
+    printf("\n");
+    int sorted = isSorted(&q);
+    if (sorted) {
+        printf("The array is sorted\n");
+    } else {
+        printf("The array is not sorted\n");
+    }
+}
